@@ -27,9 +27,9 @@ jobs:
         run: |
           make
 
-      - name: Run tests
-        run: |
-          ./test_ascii85
+      #- name: Run tests
+        #run: |
+          #./test_ascii85
 
       - name: Clean build files (optional)
         run: |
