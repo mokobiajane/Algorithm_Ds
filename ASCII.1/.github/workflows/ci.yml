@@ -21,10 +21,13 @@ jobs:
           sudo apt-get install -y build-essential g++
 
       - name: Build the project
-        run: make
+        run: |
+          make
 
       - name: Run tests
-        run: make test
+        run: |
+          make test
 
       - name: Clean build files (optional)
-        run: make clean
+        run: |
+          make clean
