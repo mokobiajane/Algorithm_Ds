@@ -4,17 +4,17 @@
 
 int main(int argc, char* argv[]) {
     if (argc != 3) {
-        std::cerr << "Usage: ./ascii85 <encode|decode> <text>" << std::endl;
+        std::cerr << "Usage: ./ascii85 <-e|-d> <text>" << std::endl;
         return 1;
     }
 
     std::string mode = argv[1];
     std::string data = argv[2];
 
-    if (mode == "encode") {
+    if (mode == "-e") {
         std::string encoded = encode_ascii85(data);
         std::cout << encoded << std::endl;
-    } else if (mode == "decode") {
+    } else if (mode == "-d") {
         try {
             std::string decoded = decode_ascii85_to_string(data);
             std::cout << decoded << std::endl;

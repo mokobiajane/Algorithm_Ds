@@ -1,9 +1,13 @@
 To build Task 1.1(Decoder):
 
-run:g++ -std=c++11 -c ascii85.cpp
-g++ -std=c++11 -c main.cpp
-g++ ascii85.o main.o -o ascii85
+BUILD: "make"
 
-./ascii85 encode < input >
 
-./ascii85 decode <"encode result">
+RUN PROGRAM: ./ascii85 -e < input >
+             ./ascii85 -d < "-e result" >
+
+
+RUN TEST: ./test_ascii85
+
+
+CLEAN BUILD FILES: make clean
