@@ -30,5 +30,9 @@ $(TEST_BIN): $(OBJS) $(TEST_OBJ)
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
+#test: $(BIN) $(TEST_BIN)
+#	./$(TEST_BIN)
+#	python3 $(PYTHON_TEST) | tee python_test_output.txt	
+
 clean:
 	rm -f *.o $(BIN) $(TEST_BIN)

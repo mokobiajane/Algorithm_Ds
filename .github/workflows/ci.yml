@@ -34,3 +34,7 @@ jobs:
       - name: Clean build files (optional)
         run: |
           make clean
+
+      - name: Run Task 1.3 Tests
+        run: |
+          make test

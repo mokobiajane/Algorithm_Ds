@@ -7,6 +7,8 @@
 #include <cstdint>
 #include "ascii85.hpp"
 
+namespace ascii85 {  // <<<<<<<<<<<<<<<<<<<<<<<< BEGIN NAMESPACE
+
 // ENCODE: Convert binary string to ASCII85
 std::string encode_ascii85(const std::string& input) {
     std::string output = "<~";
@@ -44,11 +46,12 @@ std::string encode_ascii85(const std::string& input) {
 std::string decode_ascii85_to_string(const std::string& input_raw) {
     std::string input = input_raw;
     if (input.size() >= 2 && input.substr(0, 2) == "<~") {
-    input = input.substr(2);
-}
-if (input.size() >= 2 && input.substr(input.size() - 2) == "~>") {
-    input = input.substr(0, input.size() - 2);
-}
+        input = input.substr(2);
+    }
+    if (input.size() >= 2 && input.substr(input.size() - 2) == "~>") {
+        input = input.substr(0, input.size() - 2);
+    }
+
     std::vector<char> group;
     std::string output;
     uint32_t value = 0;
@@ -93,3 +96,4 @@ if (input.size() >= 2 && input.substr(input.size() - 2) == "~>") {
     return output;
 }
 
+} // <<<<<<<<<<<<<<<<<<<<<<<< END NAMESPACE
