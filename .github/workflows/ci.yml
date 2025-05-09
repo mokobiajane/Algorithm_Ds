@@ -18,7 +18,7 @@ jobs:
       - name: Install build tools and Google Test
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential libgtest-dev
+          sudo apt-get install -y build-essential libgtest-dev python3
 
           cd /usr/src/googletest && sudo cmake . && sudo make
           sudo cp /usr/src/googletest/lib/*.a /usr/lib
@@ -27,11 +27,12 @@ jobs:
         run: |
           make
 
-      - name: Run tests
+      - name: Run all tests
         run: |
-          ./test_ascii85
+          make test
 
-      - name: Clean build files (optional)
+
+      - name: Clean build files 
         run: |
           make clean
 

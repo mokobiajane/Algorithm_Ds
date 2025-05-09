@@ -44,28 +44,31 @@ std::string encode_ascii85(const std::string& input) {
 
 // DECODE: Convert ASCII85 string to binary string
 std::string decode_ascii85_to_string(const std::string& input_raw) {
-    std::string input = input_raw;
-    if (input.size() >= 2 && input.substr(0, 2) == "<~") {
-        input = input.substr(2);
-    }
-    if (input.size() >= 2 && input.substr(input.size() - 2) == "~>") {
-        input = input.substr(0, input.size() - 2);
-    }
+    if (input_raw.size() < 4 || input_raw.substr(0, 2) != "<~" || input_raw.substr(input_raw.size() - 2) != "~>")
+        throw std::runtime_error("Missing <~ or ~> framing");
 
+    std::string input = input_raw.substr(2, input_raw.size() - 4);  // Strip <~ and ~>
     std::vector<char> group;
     std::string output;
     uint32_t value = 0;
+    char last_ch = '\0';
 
     for (char ch : input) {
         if (std::isspace(static_cast<unsigned char>(ch))) continue;
 
         if (ch == 'z') {
-            if (!group.empty()) throw std::runtime_error("'z' inside group");
+            if (!group.empty())
+                throw std::runtime_error("'z' inside group");
+            if (last_ch == 'z')
+                throw std::runtime_error("Repeated 'z' characters not allowed");
             output.append(4, '\0');
+            last_ch = ch;
             continue;
         }
 
-        if (ch < '!' || ch > 'u') throw std::runtime_error("Invalid character in ASCII85");
+        // STRICT VALIDATION: only allow characters between '!' and 'u'
+        if (ch < '!' || ch > 'u')
+            throw std::runtime_error("Invalid character in ASCII85");
 
         group.push_back(ch);
         if (group.size() == 5) {
@@ -77,6 +80,8 @@ std::string decode_ascii85_to_string(const std::string& input_raw) {
                 output += static_cast<char>((value >> (i * 8)) & 0xFF);
             group.clear();
         }
+
+        last_ch = ch;
     }
 
     if (!group.empty()) {
@@ -95,5 +100,4 @@ std::string decode_ascii85_to_string(const std::string& input_raw) {
 
     return output;
 }
-
 } // <<<<<<<<<<<<<<<<<<<<<<<< END NAMESPACE
