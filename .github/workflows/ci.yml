@@ -4,9 +4,15 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'ascii85/'
+      - 'gaussian-method/'  
   pull_request:
     branches:
         - main
+    paths:
+        - 'ascii85/'
+        - 'gaussian-method/'  
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -23,17 +29,15 @@ jobs:
           cd /usr/src/googletest && sudo cmake . && sudo make
           sudo cp /usr/src/googletest/lib/*.a /usr/lib
 
-      - name: Build the project
+      - name: Build the ascii85
         run: |
-          make
+          cd ascii85 && make
 
-      - name: Run all tests
+      - name: Run all tests for ascii85
         run: |
-          make test
+          cd ascii85 && make test
 
 
-      - name: Clean build files 
+      - name: Clean build files for ascii85
         run: |
-          make clean
-
-      
+          cd ascii85 && make clean
