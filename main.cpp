@@ -12,11 +12,11 @@ int main(int argc, char* argv[]) {
     std::string data = argv[2];
 
     if (mode == "-e") {
-        std::string encoded = encode_ascii85(data);
+        std::string encoded = ascii85::encode_ascii85(data);
         std::cout << encoded << std::endl;
     } else if (mode == "-d") {
         try {
-            std::string decoded = decode_ascii85_to_string(data);
+            std::string decoded =ascii85::decode_ascii85_to_string(data);
             std::cout << decoded << std::endl;
         } catch (const std::exception& e) {
             std::cerr << "Decode error: " << e.what() << std::endl;
