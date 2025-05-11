@@ -21,7 +21,5 @@ RUN PROGRAM: ./ascii85 -e < input >
 
 RUN ALL TEST(C++ & PYTHON): make test
 
-
-
 CLEAN BUILD FILES: make clean
 
