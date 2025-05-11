@@ -9,7 +9,7 @@ GTEST_LIBS = -lgtest -lgtest_main -pthread
 SRC = ascii85.cpp
 MAIN = main.cpp
 TEST = test_ascii85.cpp
-
+PYTHON_TEST = task13_test.py
 # Outputs
 BIN = ascii85
 TEST_BIN = test_ascii85
@@ -30,9 +30,9 @@ $(TEST_BIN): $(OBJS) $(TEST_OBJ)
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-#test: $(BIN) $(TEST_BIN)
-#	./$(TEST_BIN)
-#	python3 $(PYTHON_TEST) | tee python_test_output.txt	
+test: $(BIN) $(TEST_BIN)
+	./$(TEST_BIN)
+	python3 $(PYTHON_TEST) | tee python_test_output.txt	
 
 clean:
 	rm -f *.o $(BIN) $(TEST_BIN)

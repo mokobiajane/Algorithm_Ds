@@ -19,7 +19,7 @@ RUN PROGRAM: ./ascii85 -e < input >
              ./ascii85 -d < "-e result" >
 
 
-RUN TEST: ./test_ascii85
+RUN ALL TEST(C++ & PYTHON): make test
 
 
 CLEAN BUILD FILES: make clean
