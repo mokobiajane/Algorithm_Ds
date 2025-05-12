@@ -25,15 +25,18 @@ jobs:
           cd /usr/src/googletest && sudo cmake . && sudo make
           sudo cp /usr/src/googletest/lib/*.a /usr/lib
 
-      - name: Build the ascii85
+      - name: Build 
         run: |
           make
+        working-directory: ascii85
 
-      - name: Run all tests for ascii85
+      - name: Run all tests 
         run: |
           make test
+        working-directory: ascii85
 
 
-      - name: Clean build files for ascii85
+      - name: Clean build files 
         run: |
           make clean
+        working-directory: ascii85
