@@ -4,14 +4,10 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'ascii85/**'
       
   pull_request:
     branches:
         - main
-    paths:
-        - 'ascii85/**' 
         
 jobs:
   build:
@@ -31,13 +27,13 @@ jobs:
 
       - name: Build the ascii85
         run: |
-          cd ascii85 && make
+          make
 
       - name: Run all tests for ascii85
         run: |
-          cd ascii85 && make test
+          make test
 
 
       - name: Clean build files for ascii85
         run: |
-          cd ascii85 && make clean
+          make clean
