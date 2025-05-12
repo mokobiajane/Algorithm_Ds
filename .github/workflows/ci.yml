@@ -4,15 +4,10 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'ascii85/**'
-      - 'gaussian-method/**'  
+    
   pull_request:
     branches:
-      - main
-    paths:
-      - 'ascii85/**'
-      - 'gaussian-method/**'  
+      - main 
 
 jobs:
   build:
@@ -22,38 +17,23 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Install build tools and GoogleTest (for ascii85)
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential libgtest-dev python3
 
-          cd /usr/src/googletest && sudo cmake . && sudo make
-          sudo cp /usr/src/googletest/lib/*.a /usr/lib
-
-      - name: Install Eigen (for gaussian-method)
+      - name: Install Eigen 
         run: |
           sudo apt-get install -y libeigen3-dev
 
-      - name: Build ascii85
+      
+      - name: Build
         run: |
-          cd ascii85 && make
+          make
+        working-directory: gaussian-method
 
-      - name: Run tests for ascii85
+      - name: Run tests
         run: |
-          cd ascii85 && make test
+          make test
+        working-directory: gaussian-method
 
-      - name: Clean ascii85 build files
+      - name: Clean build files
         run: |
-          cd ascii85 && make clean
-
-      - name: Build gaussian-method
-        run: |
-          cd gaussian-method && make
-
-      - name: Run tests for gaussian-method
-        run: |
-          cd gaussian-method && make test
-
-      - name: Clean gaussian-method build files
-        run: |
-          cd gaussian-method && make clean
+          make clean
+        working-directory: gaussian-method  
