@@ -1,0 +1,22 @@
+CXX = g++
+CXXFLAGS = -std=c++17 -O3 -Wall -I. -I/usr/include/eigen3
+
+TARGET = gauss_calc
+TEST = test_gauss
+
+SRC = main.cpp gauss.cpp
+TEST_SRC = test_gauss.cpp gauss.cpp
+
+.PHONY: all clean test
+
+all: $(TARGET)
+
+$(TARGET): $(SRC)
+	$(CXX) $(CXXFLAGS) -o $@ $^
+
+test: $(TEST_SRC)
+	$(CXX) $(CXXFLAGS) -o $(TEST) $^
+	./$(TEST)
+
+clean:
+	rm -f $(TARGET) $(TEST)
