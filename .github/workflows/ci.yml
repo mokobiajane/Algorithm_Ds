@@ -4,10 +4,12 @@ on:
   push:
     branches:
       - main
-    
+      - gaussian-method
+
   pull_request:
     branches:
       - main 
+      - gaussian-method
 
 jobs:
   build:
