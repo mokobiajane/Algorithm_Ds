@@ -36,6 +36,7 @@ TEST_CASE("Gaussian elimination solves identity system") {
         augmented(i, size) = static_cast<double>(i + 1);  // b = [1, 2, 3, 4]
     }
 
+
     Eigen::VectorXd x = gaussianElimination(augmented);
     for (int i = 0; i < size; ++i) {
         REQUIRE(x(i) == Approx(i + 1.0).margin(1e-6));
