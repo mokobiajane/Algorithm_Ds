@@ -15,7 +15,7 @@ $(TARGET): $(SRC)
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
 test: $(TEST_SRC)
-	$(CXX) $(CXXFLAGS) -o $(TEST) $^
+	$(CXX) $(CXXFLAGS) -o $(TEST) $^ -lgtest -lgtest_main -pthread
 	./$(TEST)
 
 clean:

@@ -43,20 +43,44 @@ Eigen::MatrixXd generateSystem(int size, int seed) {
 
 Eigen::VectorXd gaussianElimination(Eigen::MatrixXd augmented) {
     const int n = augmented.rows();
+    const double epsilon = 1e-9;  // Small threshold to consider as zero for numerical precision
 
     for (int i = 0; i < n; ++i) {
         int maxRow = i;
+        // Find the row with the largest pivot element in column i
         for (int k = i + 1; k < n; ++k)
             if (std::abs(augmented(k, i)) > std::abs(augmented(maxRow, i)))
                 maxRow = k;
+
+        // Swap the current row with the one having the largest pivot element
         augmented.row(i).swap(augmented.row(maxRow));
 
+        // Check if the pivot element is close to zero, indicating a singular matrix
+        if (std::abs(augmented(i, i)) < epsilon) {
+            // Check if the entire row is near zero (indicating linear dependence)
+            bool isRowZero = true;
+            for (int j = i; j < n; ++j) {
+                if (std::abs(augmented(i, j)) > epsilon) {
+                    isRowZero = false;
+                    break;
+                }
+            }
+
+            if (isRowZero) {
+                throw std::runtime_error("Matrix is singular due to linearly dependent rows.");
+            } else {
+                throw std::runtime_error("Matrix is singular and cannot be solved.");
+            }
+        }
+
+        // Eliminate the entries below the pivot element
         for (int k = i + 1; k < n; ++k) {
             double factor = augmented(k, i) / augmented(i, i);
             augmented.row(k) -= factor * augmented.row(i);
         }
     }
 
+    // Back substitution to solve for the unknowns
     Eigen::VectorXd x(n);
     for (int i = n - 1; i >= 0; --i) {
         x(i) = augmented(i, n);
@@ -67,3 +91,4 @@ Eigen::VectorXd gaussianElimination(Eigen::MatrixXd augmented) {
 
     return x;
 }
+
