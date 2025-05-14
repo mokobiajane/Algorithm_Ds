@@ -9,13 +9,14 @@ TEST_SRC = test_gauss.cpp gauss.cpp
 
 .PHONY: all clean test
 
+
 all: $(TARGET)
 
 $(TARGET): $(SRC)
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
 test: $(TEST_SRC)
-	$(CXX) $(CXXFLAGS) -o $(TEST) $^ -lgtest -lgtest_main -pthread
+	$(CXX) $(CXXFLAGS) -o $(TEST) $^ -lgtest -lgtest_main -pthread -L/usr/lib
 	./$(TEST)
 
 clean:
