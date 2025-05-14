@@ -11,7 +11,6 @@ TEST_SRC = test_gauss.cpp gauss.cpp
 
 all: $(TARGET)
 
-
 $(TARGET): $(SRC)
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
