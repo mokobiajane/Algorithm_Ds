@@ -19,29 +19,21 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Install GoogleTest
+      - name: Install dependencies (GoogleTest & Eigen)
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential libgtest-dev cmake
-          cd /usr/src/googletest && sudo cmake . && sudo make
-          sudo cp /usr/src/googletest/lib/*.a /usr/lib
-          
+          sudo apt-get install -y build-essential libeigen3-dev libgtest-dev cmake
+          cd /usr/src/gtest && sudo cmake . && sudo make
+          sudo cp *.a /usr/lib
 
-      - name: Install Eigen 
-        run: |
-          sudo apt-get install -y libeigen3-dev
-
-      - name: Build
-        run: |
-          make
+      - name: Build 
+        run: make
         working-directory: gaussian-method
 
-      - name: Run tests
-        run: |
-          make test
+      - name: Build and run tests
+        run: make test
         working-directory: gaussian-method
 
-      - name: Clean build files
-        run: |
-          make clean
+      - name: Clean up build artifacts
+        run: make clean
         working-directory: gaussian-method
