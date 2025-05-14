@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -std=c++17 -O3 -Wall -I. -I/usr/include/eigen3
+CXXFLAGS = -std=c++17 -O3 -Wall -I. -I/usr/include/eigen3 -I/usr/src/gtest/include
 
 TARGET = gauss_calc
 TEST = test_gauss
