@@ -13,7 +13,7 @@ TEST_TARGET = guass_test
 SRCS = main.cpp gauss.cpp
 TEST_SRCS = test_gauss.cpp gauss.cpp
 
-# Build the main solver
+# Build mains
 all: $(TARGET)
 
 $(TARGET): $(SRCS)
