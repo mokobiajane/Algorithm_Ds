@@ -10,12 +10,9 @@ st135735@student.spbu.ru
 
 Homework: Gaussian Elimination
   
-
 BUILD: "make"
 
-
 RUN PROGRAM: ./gauss_calc
-
 
 RUN ALL TEST: make test
 
