@@ -21,4 +21,3 @@ shannon_test: shannon_test.cpp $(OBJS)
 
 clean:
 	rm -f encoder decoder shannon_test *.bin *.txt
-	
