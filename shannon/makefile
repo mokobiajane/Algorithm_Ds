@@ -16,3 +16,10 @@ $(TARGET): $(OBJS)
 
 clean:
 	rm -f $(OBJS) $(TARGET) output.bin dict.bin
+
+decoder: decoder_main.o shannon_decoder.o
+	$(CXX) $(CXXFLAGS) -o decoder decoder_main.o shannon_decoder.o
+
+clean:
+	rm -f $(OBJS) decoder_main.o shannon_decoder.o decoder \
+ output.bin dict.bin decoded.bin decoded.bin

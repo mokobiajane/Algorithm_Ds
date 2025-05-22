@@ -8,7 +8,7 @@
 #include <iomanip>
 #include <iostream>
 #include <cstdint>
-#include <cctype>  
+#include <cctype>
 
 struct SymbolData {
     uint8_t symbol;
@@ -17,26 +17,33 @@ struct SymbolData {
     std::string code;
 };
 
-static void giveShannonCodes(std::vector<SymbolData>& symbols, int start, int end) {
-    if (start >= end) return;
-    if (end - start == 1) return;
+static void giveshannoncodes(std::vector<SymbolData>& symbols, int start, int end) {
+    if (end - start <= 1) return;
 
-    double total = 0;
-    for (int i = start; i < end; ++i) total += symbols[i].probability;
+    double total = 0.0;
+    for (int i = start; i < end; ++i)
+        total += symbols[i].probability;
 
-    double half = total / 2;
-    double sum = 0;
-    int mid = start;
-    for (; mid < end; ++mid) {
-        sum += symbols[mid].probability;
-        if (sum >= half) break;
+    double bestDiff = total;
+    int splitIndex = start;
+
+    double leftSum = 0.0;
+    for (int i = start; i < end - 1; ++i) {
+        leftSum += symbols[i].probability;
+        double diff = std::abs((total - leftSum) - leftSum);
+        if (diff < bestDiff) {
+            bestDiff = diff;
+            splitIndex = i;
+        }
     }
 
-    for (int i = start; i <= mid; ++i) symbols[i].code += '0';
-    for (int i = mid + 1; i < end; ++i) symbols[i].code += '1';
+    for (int i = start; i <= splitIndex; ++i)
+        symbols[i].code += '0';
+    for (int i = splitIndex + 1; i < end; ++i)
+        symbols[i].code += '1';
 
-    giveShannonCodes(symbols, start, mid + 1);
-    giveShannonCodes(symbols, mid + 1, end);
+    giveshannoncodes(symbols, start, splitIndex + 1);
+    giveshannoncodes(symbols, splitIndex + 1, end);
 }
 
 std::string symbolToString(uint8_t symbol) {
@@ -70,6 +77,7 @@ void encodeFile(const std::string& inputFile,
     std::map<uint8_t, int> freq;
     for (uint8_t byte : data) freq[byte]++;
     int total = static_cast<int>(data.size());
+
     std::vector<SymbolData> symbols;
     for (auto& [symbol, count] : freq) {
         symbols.push_back({symbol, count, static_cast<double>(count) / total, ""});
@@ -80,28 +88,51 @@ void encodeFile(const std::string& inputFile,
                   return a.probability > b.probability;
               });
 
-    giveShannonCodes(symbols, 0, symbols.size());
+    giveshannoncodes(symbols, 0, symbols.size());
 
     std::unordered_map<uint8_t, std::string> encodingMap;
     for (const auto& s : symbols) {
         encodingMap[s.symbol] = s.code;
     }
 
-    // e.o
     std::string bitBuffer;
-    for (uint8_t byte : data) bitBuffer += encodingMap[byte];
+    for (uint8_t byte : data) {
+        bitBuffer += encodingMap[byte];
+    }
 
-    // Write bbfr
-std::ofstream out(outputFile);
-if (!out) {
-    std::cerr << "Failed to open output file for writing.\n";
-    return;
-}
+    std::ofstream out(outputFile, std::ios::binary);
+    if (!out) {
+        std::cerr << "Failed to open output file for writing.\n";
+        return;
+    }
 
-out << bitBuffer;  
-out.close();
+    uint8_t currentByte = 0;
+    int bitCount = 0;
+    for (char bit : bitBuffer) {
+        currentByte = (currentByte << 1) | (bit - '0');
+        bitCount++;
+        if (bitCount == 8) {
+            out.put(static_cast<char>(currentByte));
+            bitCount = 0;
+            currentByte = 0;
+        }
+    }
+
+    uint8_t paddingBits = 0;
+    if (bitCount > 0) {
+        currentByte <<= (8 - bitCount); 
+        out.put(static_cast<char>(currentByte));
+        paddingBits = 8 - bitCount;
+    }
+
+    // Write 1 byte to indicate padding bits (to help the decoder)
+    out.put(static_cast<char>(paddingBits));
     out.close();
 
+    //std::cout << "Encoded bitBuffer size: " << bitBuffer.size() << " bits\n";
+    //std::cout << "Padding bits added: " << static_cast<int>(paddingBits) << "\n";
+
+    // Write dictionary
     std::ofstream dictOut(dictFile);
     dictOut << std::left;
     dictOut << std::setw(8) << "Symbol" << " | "
@@ -120,5 +151,7 @@ out.close();
                 << std::setw(12) << std::fixed << std::setprecision(6) << s.probability << " | "
                 << s.code << "\n";
     }
+
+    //dictOut << "\nPaddingBits: " << std::to_string(paddingBits) << "\n";
     dictOut.close();
 }
