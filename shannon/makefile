@@ -1,25 +1,23 @@
 CXX = g++
-CXXFLAGS = -std=c++17 -Wall -Wextra -O2
+CXXFLAGS = -std=c++17 -Wall -Wextra
+OBJS = shannon_encoder.cpp shannon_decoder.cpp
 
-TARGET = encoder
+# Targets
+all: encoder decoder
 
-SRCS = encoder_main.cpp shannon_encoder.cpp
-OBJS = $(SRCS:.cpp=.o)
+encoder: encoder_main.cpp $(OBJS)
+	$(CXX) $(CXXFLAGS) -o encoder encoder_main.cpp $(OBJS)
 
-all: $(TARGET)
+decoder: decoder_main.cpp $(OBJS)
+	$(CXX) $(CXXFLAGS) -o decoder decoder_main.cpp $(OBJS)
 
-$(TARGET): $(OBJS)
-	$(CXX) $(CXXFLAGS) -o $@ $^
+# Run full encode-decode test
+test: shannon_test
+	./shannon_test
 
-%.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+shannon_test: shannon_test.cpp $(OBJS)
+	$(CXX) $(CXXFLAGS) -o shannon_test shannon_test.cpp $(OBJS)
+	chmod +x shannon_test
 
 clean:
-	rm -f $(OBJS) $(TARGET) output.bin dict.bin
-
-decoder: decoder_main.o shannon_decoder.o
-	$(CXX) $(CXXFLAGS) -o decoder decoder_main.o shannon_decoder.o
-
-clean:
-	rm -f $(OBJS) decoder_main.o shannon_decoder.o decoder \
- output.bin dict.bin decoded.bin decoded.bin
+	rm -f encoder decoder shannon_test *.bin *.txt

@@ -7,14 +7,13 @@ st135735@student.spbu.ru
 # AaDS_HW1_ASCII85  
 Implemention of Shannon encoder/decoder with tests
 
-BUILD: make
-RUN PROGRAM: ./encoder
-
------(for decoder)
 Build: make
-run program: ./encoder
-             make decoder
+run program: echo "text" > input.bin
+            ./encoder
+            make decoder
             ./decoder
+
+build test: make test            
 
 CLEAN BUILD FILES: make clean
 
